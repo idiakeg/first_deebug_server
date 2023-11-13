@@ -57,7 +57,7 @@ router.put("/edit/:id", (req, res) => {
 		-1; /* This is included to help us track the exact index(position) in the array where the user resides in the array*/
 	const found = membersArray.some((member) => {
 		index++; /* increment the index upon each iteration */
-		return member.id === Number(id);
+		return member.id === id;
 	});
 
 	// if the user with the provided id doesnot exist alert the client
@@ -69,8 +69,8 @@ router.put("/edit/:id", (req, res) => {
 	}
 
 	// the filter method always returns and array of items that pass the specified condition, the array returned is destructured in place in the code below
-	const [member] = membersArray.filter((member) => member.id === Number(id));
-	member.name = name ? name : member.name;
+	const [member] = membersArray.filter((member) => member.id === id);
+	member.name = name || member.name;
 	member.age = age ? age : member.age;
 	member.occupation = occupation ? occupation : member.occupation;
 	member.is_online = is_online ? is_online : member.is_online;
@@ -136,13 +136,15 @@ router.get("/single_member/:id", (req, res) => {
 		});
 	}
 
-	const nMembers = membersArray.filter((member) => member.id === Number(id));
+	const nMembers = membersArray.filter((member) => member.id == id);
 	if (nMembers.length === 0) {
 		return res.status(404).send({
 			status: "error",
 			msg: `No user with id: ${id}`,
 		});
 	}
+
+	console.log(typeof id);
 
 	return res.status(200).send({
 		status: "ok",
